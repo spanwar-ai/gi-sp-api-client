@@ -1,0 +1,50 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        vscode: {
+          bg: 'var(--vscode-editor-background)',
+          fg: 'var(--vscode-foreground)',
+          'sidebar-bg': 'var(--vscode-sideBar-background)',
+          'sidebar-fg': 'var(--vscode-sideBar-foreground)',
+          'input-bg': 'var(--vscode-input-background)',
+          'input-fg': 'var(--vscode-input-foreground)',
+          'input-border': 'var(--vscode-input-border)',
+          'button-bg': 'var(--vscode-button-background)',
+          'button-fg': 'var(--vscode-button-foreground)',
+          'button-hover': 'var(--vscode-button-hoverBackground)',
+          'button-secondary-bg': 'var(--vscode-button-secondaryBackground)',
+          'button-secondary-fg': 'var(--vscode-button-secondaryForeground)',
+          border: 'var(--vscode-panel-border)',
+          'tab-active-bg': 'var(--vscode-tab-activeBackground)',
+          'tab-inactive-bg': 'var(--vscode-tab-inactiveBackground)',
+          'tab-active-fg': 'var(--vscode-tab-activeForeground)',
+          'tab-inactive-fg': 'var(--vscode-tab-inactiveForeground)',
+          'list-hover': 'var(--vscode-list-hoverBackground)',
+          'list-active': 'var(--vscode-list-activeSelectionBackground)',
+          'list-active-fg': 'var(--vscode-list-activeSelectionForeground)',
+          'badge-bg': 'var(--vscode-badge-background)',
+          'badge-fg': 'var(--vscode-badge-foreground)',
+          'dropdown-bg': 'var(--vscode-dropdown-background)',
+          'dropdown-fg': 'var(--vscode-dropdown-foreground)',
+          'dropdown-border': 'var(--vscode-dropdown-border)',
+          'focus-border': 'var(--vscode-focusBorder)',
+          'error-fg': 'var(--vscode-errorForeground)',
+          'success-fg': 'var(--vscode-testing-iconPassed)',
+          'warning-fg': 'var(--vscode-editorWarning-foreground)',
+        },
+      },
+      fontFamily: {
+        vscode: 'var(--vscode-font-family)',
+        'vscode-editor': 'var(--vscode-editor-font-family)',
+      },
+      fontSize: {
+        vscode: 'var(--vscode-font-size)',
+        'vscode-editor': 'var(--vscode-editor-font-size)',
+      },
+    },
+  },
+  plugins: [],
+};
