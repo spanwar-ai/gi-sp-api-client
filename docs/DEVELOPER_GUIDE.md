@@ -16,7 +16,7 @@ Everything a contributor needs to build, run, and extend this extension. For day
 
 ```bash
 git clone <repo-url>
-cd AavamiRestApi
+cd GISPRestApi
 
 # Install dependencies (both root and webview)
 npm install
@@ -51,7 +51,7 @@ Then F5 to launch the dev host. Extension-host code changes hot-reload automatic
 ## Repository layout
 
 ```
-AavamiRestApi/
+GISPRestApi/
 ├── src/                          # Extension host (Node.js + TypeScript)
 │   ├── extension.ts              # Activation, DI, command registration
 │   ├── panels/MainPanel.ts       # Main webview panel + message router

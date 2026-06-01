@@ -55,7 +55,7 @@ export class MainPanel {
     }
 
     const panel = vscode.window.createWebviewPanel(
-      'aavamiRest.mainPanel',
+      'GISPRest.mainPanel',
       'GI-SP REST & SOAP Client',
       column || vscode.ViewColumn.One,
       {
@@ -313,7 +313,7 @@ export class MainPanel {
       }
 
       case 'getSettings': {
-        const cfg = vscode.workspace.getConfiguration('aavamiRest');
+        const cfg = vscode.workspace.getConfiguration('GISPRest');
         this.post({
           type: 'settings',
           payload: {
@@ -328,7 +328,7 @@ export class MainPanel {
       }
 
       case 'saveSettings': {
-        const settings = vscode.workspace.getConfiguration('aavamiRest');
+        const settings = vscode.workspace.getConfiguration('GISPRest');
         for (const [key, value] of Object.entries(msg.payload)) {
           await settings.update(key, value, vscode.ConfigurationTarget.Global);
         }

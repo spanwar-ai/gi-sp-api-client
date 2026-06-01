@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import type { StorageService } from './StorageService';
 import type { LicenseService, LicenseRole } from './LicenseService';
 
-const ACTIVATION_ROLE_KEY = 'aavamiRest.role';
+const ACTIVATION_ROLE_KEY = 'GISPRest.role';
 
 // ── SMTP Configuration (embedded in build) ──────────
 const SMTP_EMAIL = 'spanwar.ai@gmail.com';

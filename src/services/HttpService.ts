@@ -19,7 +19,7 @@ export class HttpService {
     const controller = new AbortController();
     this.abortControllers.set(request.id, controller);
 
-    const config = vscode.workspace.getConfiguration('aavamiRest');
+    const config = vscode.workspace.getConfiguration('GISPRest');
     const timeout = config.get<number>('requestTimeout', DEFAULT_TIMEOUT);
     const sslVerification = config.get<boolean>('sslVerification', true);
     const followRedirects = config.get<boolean>('followRedirects', true);

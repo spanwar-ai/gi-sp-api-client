@@ -11,7 +11,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxkkb3BWfxtpx3O4EsNq
 const SHARED_TOKEN = '3bCfRu2Rvr0Gzt72cXnlMuiMEluJXKeYXeMWv2nRLns';
 // ─────────────────────────────────────────────────────────────────────────
 
-const CACHE_KEY = 'aavamiRest.licenseCache';
+const CACHE_KEY = 'GISPRest.licenseCache';
 const OFFLINE_GRACE_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export type LicenseRole = 'admin' | 'user';

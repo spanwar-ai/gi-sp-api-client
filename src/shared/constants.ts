@@ -1,21 +1,21 @@
 export const DATA_DIR = 'C:\\RestApiTestData';
-export const DATA_FILE = 'C:\\RestApiTestData\\aavami-data.json';
+export const DATA_FILE = 'C:\\RestApiTestData\\GISP-data.json';
 
 export const DEFAULT_TIMEOUT = 30000;
 export const MAX_HISTORY_ENTRIES = 500;
 export const MAX_RESPONSE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export const STORAGE_KEYS = {
-  COLLECTIONS: 'aavamiRest.collections',
-  ENVIRONMENTS: 'aavamiRest.environments',
-  HISTORY: 'aavamiRest.history',
-  ACTIVE_ENVIRONMENT: 'aavamiRest.activeEnvironment',
-  SETTINGS: 'aavamiRest.settings',
-  TOKEN_CACHE: 'aavamiRest.tokenCache',
+  COLLECTIONS: 'GISPRest.collections',
+  ENVIRONMENTS: 'GISPRest.environments',
+  HISTORY: 'GISPRest.history',
+  ACTIVE_ENVIRONMENT: 'GISPRest.activeEnvironment',
+  SETTINGS: 'GISPRest.settings',
+  TOKEN_CACHE: 'GISPRest.tokenCache',
 } as const;
 
 export const DEFAULT_HEADERS: Record<string, string> = {
-  'User-Agent': 'AavamiREST/1.0',
+  'User-Agent': 'GISPREST/1.0',
   Accept: '*/*',
 };
 

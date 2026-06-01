@@ -138,7 +138,7 @@ function out(obj) {
 ```
 
 4. Replace `PASTE_YOUR_SHARED_TOKEN_HERE` with the token from Part 2.
-5. Save (Ctrl+S). Name the project anything, e.g. `aavami-license`.
+5. Save (Ctrl+S). Name the project anything, e.g. `GISP-license`.
 
 ---
 
@@ -147,7 +147,7 @@ function out(obj) {
 1. Top-right blue **Deploy → New deployment**.
 2. Gear icon next to "Select type" → **Web app**.
 3. Settings:
-   - **Description:** `aavami-rest-license-v1` (anything)
+   - **Description:** `GISP-rest-license-v1` (anything)
    - **Execute as:** **Me** (your Google account — the script needs access to the sheet)
    - **Who has access:** **Anyone** (the TOKEN is what gates real access, not Google auth)
 4. **Deploy**.

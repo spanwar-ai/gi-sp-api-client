@@ -36,56 +36,56 @@
   "contributes": {
     "commands": [
       {
-        "command": "aavamiRest.open",
+        "command": "GISPRest.open",
         "title": "GI-SP REST & SOAP Client: Open"
       },
       {
-        "command": "aavamiRest.newRequest",
+        "command": "GISPRest.newRequest",
         "title": "GI-SP REST & SOAP Client: New Request"
       },
       {
-        "command": "aavamiRest.saveRequest",
+        "command": "GISPRest.saveRequest",
         "title": "GI-SP REST & SOAP Client: Save Request"
       },
       {
-        "command": "aavamiRest.importCollection",
+        "command": "GISPRest.importCollection",
         "title": "GI-SP REST & SOAP Client: Import Collection"
       },
       {
-        "command": "aavamiRest.exportCollection",
+        "command": "GISPRest.exportCollection",
         "title": "GI-SP REST & SOAP Client: Export Collection"
       },
       {
-        "command": "aavamiRest.newCollection",
+        "command": "GISPRest.newCollection",
         "title": "GI-SP REST & SOAP Client: New Collection"
       },
       {
-        "command": "aavamiRest.newEnvironment",
+        "command": "GISPRest.newEnvironment",
         "title": "GI-SP REST & SOAP Client: New Environment"
       },
       {
-        "command": "aavamiRest.clearHistory",
+        "command": "GISPRest.clearHistory",
         "title": "GI-SP REST & SOAP Client: Clear History"
       },
       {
-        "command": "aavamiRest.resetActivation",
+        "command": "GISPRest.resetActivation",
         "title": "GI-SP REST & SOAP Client: Reset Activation"
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "aavamiRest",
+          "id": "GISPRest",
           "title": "GI-SP REST & SOAP Client",
           "icon": "resources/icon.svg"
         }
       ]
     },
     "views": {
-      "aavamiRest": [
+      "GISPRest": [
         {
           "type": "webview",
-          "id": "aavamiRest.sidebarView",
+          "id": "GISPRest.sidebarView",
           "name": "GI-SP REST & SOAP Client"
         }
       ]
@@ -93,27 +93,27 @@
     "configuration": {
       "title": "GI-SP REST & SOAP Client",
       "properties": {
-        "aavamiRest.requestTimeout": {
+        "GISPRest.requestTimeout": {
           "type": "number",
           "default": 30000,
           "description": "Default request timeout in milliseconds"
         },
-        "aavamiRest.maxHistoryEntries": {
+        "GISPRest.maxHistoryEntries": {
           "type": "number",
           "default": 500,
           "description": "Maximum number of history entries to keep"
         },
-        "aavamiRest.followRedirects": {
+        "GISPRest.followRedirects": {
           "type": "boolean",
           "default": true,
           "description": "Automatically follow HTTP redirects"
         },
-        "aavamiRest.sslVerification": {
+        "GISPRest.sslVerification": {
           "type": "boolean",
           "default": true,
           "description": "Enable SSL certificate verification"
         },
-        "aavamiRest.maxResponseSize": {
+        "GISPRest.maxResponseSize": {
           "type": "number",
           "default": 10485760,
           "description": "Maximum response size in bytes (default 10MB)"

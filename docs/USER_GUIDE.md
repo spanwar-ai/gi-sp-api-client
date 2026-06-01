@@ -205,11 +205,11 @@ Open VS Code Settings (`Ctrl+,`) → search "GI-SP REST & SOAP Client".
 
 | Setting | Default | Description |
 |---|---|---|
-| `aavamiRest.requestTimeout` | `30000` | Request timeout in milliseconds |
-| `aavamiRest.maxHistoryEntries` | `500` | Maximum history entries kept |
-| `aavamiRest.followRedirects` | `true` | Follow HTTP 3xx redirects |
-| `aavamiRest.sslVerification` | `true` | Verify SSL certificates |
-| `aavamiRest.maxResponseSize` | `10485760` | Max response body size (bytes; default 10 MB) |
+| `GISPRest.requestTimeout` | `30000` | Request timeout in milliseconds |
+| `GISPRest.maxHistoryEntries` | `500` | Maximum history entries kept |
+| `GISPRest.followRedirects` | `true` | Follow HTTP 3xx redirects |
+| `GISPRest.sslVerification` | `true` | Verify SSL certificates |
+| `GISPRest.maxResponseSize` | `10485760` | Max response body size (bytes; default 10 MB) |
 
 VS Code's built-in `http.proxy` setting is also honored.
 

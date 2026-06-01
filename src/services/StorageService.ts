@@ -12,11 +12,11 @@ interface DataFile {
 }
 
 const KEY_TO_FIELD: Record<string, keyof Omit<DataFile, 'version'>> = {
-  'aavamiRest.collections': 'collections',
-  'aavamiRest.environments': 'environments',
-  'aavamiRest.history': 'history',
-  'aavamiRest.activeEnvironment': 'activeEnvironment',
-  'aavamiRest.settings': 'settings',
+  'GISPRest.collections': 'collections',
+  'GISPRest.environments': 'environments',
+  'GISPRest.history': 'history',
+  'GISPRest.activeEnvironment': 'activeEnvironment',
+  'GISPRest.settings': 'settings',
 };
 
 const EMPTY_DATA: DataFile = {

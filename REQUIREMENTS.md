@@ -65,7 +65,7 @@ The user-facing docs (README, USER_GUIDE) avoid internal/dev jargon. The dev-fac
 
 **Build:** `npm run build` runs `webview-ui` (vite/tsc) then `esbuild.js` bundles `dist/extension.js`. The extension loads `webview-ui/dist/assets/index.{js,css}` into the webview via CSP-locked HTML in `utils/webviewUtils.ts`.
 
-**Persistence:** all collections / environments / history / settings live in a single JSON file at `C:\RestApiTestData\aavami-data.json` (see `StorageService`). Only **secrets** (OAuth2 tokens, activation flag) go through VS Code `SecretStorage` → OS keychain.
+**Persistence:** all collections / environments / history / settings live in a single JSON file at `C:\RestApiTestData\GISP-data.json` (see `StorageService`). Only **secrets** (OAuth2 tokens, activation flag) go through VS Code `SecretStorage` → OS keychain.
 
 ---
 
@@ -75,19 +75,19 @@ The user-facing docs (README, USER_GUIDE) avoid internal/dev jargon. The dev-fac
 
 | File | Responsibility |
 |---|---|
-| `extension.ts` | Activation entry. Instantiates every service, registers all `aavamiRest.*` commands, registers `SidebarProvider`, auto-opens the main panel. |
+| `extension.ts` | Activation entry. Instantiates every service, registers all `GISPRest.*` commands, registers `SidebarProvider`, auto-opens the main panel. |
 | `panels/MainPanel.ts` | Singleton `WebviewPanel`. Routes every `WebviewMessage` → service call → `ExtensionMessage` response. Handles `sendRequest` (interpolation + auth headers + http call + history write). |
-| `providers/SidebarProvider.ts` | Activity-bar `WebviewViewProvider`. Limited message router — most actions delegate to `aavamiRest.open`. |
-| `services/StorageService.ts` | File-based global storage (`C:\RestApiTestData\aavami-data.json`) + workspace memento + secret storage. Maps `STORAGE_KEYS.*` → JSON fields. |
+| `providers/SidebarProvider.ts` | Activity-bar `WebviewViewProvider`. Limited message router — most actions delegate to `GISPRest.open`. |
+| `services/StorageService.ts` | File-based global storage (`C:\RestApiTestData\GISP-data.json`) + workspace memento + secret storage. Maps `STORAGE_KEYS.*` → JSON fields. |
 | `services/HttpService.ts` | axios-based HTTP. Resolves headers / params / body / proxy / SSL / timeout / abort. Body types: json, raw, form-urlencoded, form-data (FormData), binary (base64 → Buffer), graphql. |
 | `services/AuthService.ts` | All auth flows. OAuth2 client-credentials (axios + MSAL for `login.microsoftonline.com`), OAuth2 auth-code with PKCE S256 + state + local callback server on the redirect-URI port. Token cache in memory + `SecretStorage` (key `STORAGE_KEYS.TOKEN_CACHE`). |
 | `services/CollectionService.ts` | CRUD on collections. Native JSON import/export + Postman v2.x import (`importPostmanCollection`). UUIDs via `uuid`. |
 | `services/EnvironmentService.ts` | CRUD on environments + active-env toggle + `resolveVariables` delegating to `utils/variableInterpolation.ts`. |
-| `services/HistoryService.ts` | Append-only history (newest first), capped by `aavamiRest.maxHistoryEntries`. **Strips auth** before persisting. |
+| `services/HistoryService.ts` | Append-only history (newest first), capped by `GISPRest.maxHistoryEntries`. **Strips auth** before persisting. |
 | `services/CurlService.ts` | Pure-function curl generator. |
 | `services/AlCodeService.ts` | Business Central AL procedure generator (HttpClient + companion `AcquireAccessToken` for OAuth2 flows). |
 | `services/ActivationService.ts` | Generates **two** 6-digit codes per request (`adminCode`, `userCode`). Emails BOTH to the publisher via nodemailer/SMTP (Gmail, `spanwar.ai@gmail.com`). Owner shares one — backend infers role from which code matched. 10-min expiry, 5 attempts max. On success → calls `LicenseService.registerActivation`. `getStatus()` queries the Sheet via `LicenseService` (with 24h offline cache). |
-| `services/LicenseService.ts` | License check via a **Google Apps Script Web App** bound to a Google Sheet (the script owns the sheet credentials; the extension never touches Sheets API directly). `checkActivation(machineId)` GETs `SCRIPT_URL?action=check&token=...&machineId=...` and parses `{valid, role, expiryDate}`. `registerActivation(...)` GETs `?action=register&...` — the script appends a row or updates an existing one, setting `expiryDate = now + 30 days`. 24h offline cache in `SecretStorage` key `aavamiRest.licenseCache`. Two embedded constants: `SCRIPT_URL` and `SHARED_TOKEN` (placeholders until publisher fills them in via [SETUP.md](SETUP.md)). |
+| `services/LicenseService.ts` | License check via a **Google Apps Script Web App** bound to a Google Sheet (the script owns the sheet credentials; the extension never touches Sheets API directly). `checkActivation(machineId)` GETs `SCRIPT_URL?action=check&token=...&machineId=...` and parses `{valid, role, expiryDate}`. `registerActivation(...)` GETs `?action=register&...` — the script appends a row or updates an existing one, setting `expiryDate = now + 30 days`. 24h offline cache in `SecretStorage` key `GISPRest.licenseCache`. Two embedded constants: `SCRIPT_URL` and `SHARED_TOKEN` (placeholders until publisher fills them in via [SETUP.md](SETUP.md)). |
 | `shared/models.ts` | Canonical TypeScript types — see §5. |
 | `shared/messages.ts` | `WebviewMessage` and `ExtensionMessage` discriminated unions — see §6. |
 | `shared/constants.ts` | `DATA_DIR`, `DATA_FILE`, `STORAGE_KEYS`, `DEFAULT_*`, `CONTENT_TYPE_MAP`. |
@@ -233,17 +233,17 @@ ExtensionSettings  { requestTimeout, maxHistoryEntries, followRedirects, sslVeri
 
 | Command id | Title | Where registered |
 |---|---|---|
-| `aavamiRest.open` | …: Open | `extension.ts` |
-| `aavamiRest.newRequest` | …: New Request | `extension.ts` (alias of open) |
-| `aavamiRest.saveRequest` | …: Save Request | `extension.ts` (alias of open) |
-| `aavamiRest.newCollection` | …: New Collection | `extension.ts` (uses `showInputBox`) |
-| `aavamiRest.newEnvironment` | …: New Environment | `extension.ts` (uses `showInputBox`) |
-| `aavamiRest.importCollection` | …: Import Collection | `extension.ts` (file dialog) |
-| `aavamiRest.exportCollection` | …: Export Collection | `extension.ts` (quick pick + save dialog) |
-| `aavamiRest.clearHistory` | …: Clear History | `extension.ts` (confirm modal) |
-| `aavamiRest.resetActivation` | …: Reset Activation | `extension.ts` — deletes secrets `aavamiRest.activated` (legacy) / `aavamiRest.role` / `aavamiRest.licenseCache` / `aavamiRest.tokenCache`, then offers a window reload. Use to start a clean activation flow after upgrading from the pre-licensing build. |
+| `GISPRest.open` | …: Open | `extension.ts` |
+| `GISPRest.newRequest` | …: New Request | `extension.ts` (alias of open) |
+| `GISPRest.saveRequest` | …: Save Request | `extension.ts` (alias of open) |
+| `GISPRest.newCollection` | …: New Collection | `extension.ts` (uses `showInputBox`) |
+| `GISPRest.newEnvironment` | …: New Environment | `extension.ts` (uses `showInputBox`) |
+| `GISPRest.importCollection` | …: Import Collection | `extension.ts` (file dialog) |
+| `GISPRest.exportCollection` | …: Export Collection | `extension.ts` (quick pick + save dialog) |
+| `GISPRest.clearHistory` | …: Clear History | `extension.ts` (confirm modal) |
+| `GISPRest.resetActivation` | …: Reset Activation | `extension.ts` — deletes secrets `GISPRest.activated` (legacy) / `GISPRest.role` / `GISPRest.licenseCache` / `GISPRest.tokenCache`, then offers a window reload. Use to start a clean activation flow after upgrading from the pre-licensing build. |
 
-Views: activity-bar container id `aavamiRest`, webview view id `aavamiRest.sidebarView`.
+Views: activity-bar container id `GISPRest`, webview view id `GISPRest.sidebarView`.
 
 ---
 
@@ -251,11 +251,11 @@ Views: activity-bar container id `aavamiRest`, webview view id `aavamiRest.sideb
 
 | Key | Default | Read by |
 |---|---|---|
-| `aavamiRest.requestTimeout` | 30000 | `HttpService` |
-| `aavamiRest.maxHistoryEntries` | 500 | `HistoryService` |
-| `aavamiRest.followRedirects` | true | `HttpService` |
-| `aavamiRest.sslVerification` | true | `HttpService` |
-| `aavamiRest.maxResponseSize` | 10485760 | (declared; honored implicitly via response body capture) |
+| `GISPRest.requestTimeout` | 30000 | `HttpService` |
+| `GISPRest.maxHistoryEntries` | 500 | `HistoryService` |
+| `GISPRest.followRedirects` | true | `HttpService` |
+| `GISPRest.sslVerification` | true | `HttpService` |
+| `GISPRest.maxResponseSize` | 10485760 | (declared; honored implicitly via response body capture) |
 
 Also honored: `http.proxy` (from VS Code core) — `HttpService` parses and forwards to axios.
 
@@ -265,17 +265,17 @@ Also honored: `http.proxy` (from VS Code core) — `HttpService` parses and forw
 
 ```
 DATA_DIR  = C:\RestApiTestData
-DATA_FILE = C:\RestApiTestData\aavami-data.json   ← single JSON for collections / environments / history / activeEnvironment / settings
+DATA_FILE = C:\RestApiTestData\GISP-data.json   ← single JSON for collections / environments / history / activeEnvironment / settings
 
 STORAGE_KEYS:
-  COLLECTIONS         = 'aavamiRest.collections'        (file)
-  ENVIRONMENTS        = 'aavamiRest.environments'       (file)
-  HISTORY             = 'aavamiRest.history'            (file)
-  ACTIVE_ENVIRONMENT  = 'aavamiRest.activeEnvironment'  (file, currently unused; isActive lives on Environment)
-  SETTINGS            = 'aavamiRest.settings'           (file)
-  TOKEN_CACHE         = 'aavamiRest.tokenCache'         (SecretStorage / OS keychain)
+  COLLECTIONS         = 'GISPRest.collections'        (file)
+  ENVIRONMENTS        = 'GISPRest.environments'       (file)
+  HISTORY             = 'GISPRest.history'            (file)
+  ACTIVE_ENVIRONMENT  = 'GISPRest.activeEnvironment'  (file, currently unused; isActive lives on Environment)
+  SETTINGS            = 'GISPRest.settings'           (file)
+  TOKEN_CACHE         = 'GISPRest.tokenCache'         (SecretStorage / OS keychain)
 
-Plus ACTIVATION_KEY = 'aavamiRest.activated' in SecretStorage.
+Plus ACTIVATION_KEY = 'GISPRest.activated' in SecretStorage.
 ```
 
 ---
@@ -294,7 +294,7 @@ Plus ACTIVATION_KEY = 'aavamiRest.activated' in SecretStorage.
 
 - On `webviewReady`, extension calls `ActivationService.getStatus(true)` → `LicenseService.checkActivation(vscode.env.machineId)` → reads the Google Sheet by `machineId`. If a row exists and `expiryDate` is in the future, extension posts `activationStatus {activated:true, role, expiryDate}`. Else `{activated:false, role:null, expiryDate:null}` and webview shows `ActivationGate`.
 - `requestActivationCode` → `ActivationService.generateAndSendCode()` generates **two** 6-digit codes (`adminCode`, `userCode`) and emails BOTH to the publisher (`spanwar.ai@gmail.com`) via Gmail SMTP. Owner shares one of them with the user — the choice of which code = the choice of role.
-- `verifyActivationCode` → matches input against `adminCode` or `userCode` to determine role. Up to 5 attempts, 10-minute expiry. On success: `LicenseService.registerActivation(machineId, hostname, username, role, code)` writes (or updates) a row in the Sheet with `expiryDate = now + 30 days`, also persists a cache entry in `SecretStorage[aavamiRest.licenseCache]`. Webview unlocks.
+- `verifyActivationCode` → matches input against `adminCode` or `userCode` to determine role. Up to 5 attempts, 10-minute expiry. On success: `LicenseService.registerActivation(machineId, hostname, username, role, code)` writes (or updates) a row in the Sheet with `expiryDate = now + 30 days`, also persists a cache entry in `SecretStorage[GISPRest.licenseCache]`. Webview unlocks.
 - **Role-based UI gating:** `userRole === 'admin'` → full sidebar (Collections + History + Environments) + Import/Export data buttons. `userRole === 'user'` → sidebar shows **Collections tab only**; History, Environments, and the Import/Export bottom row are hidden. Both roles get the full URL bar + request editor + response viewer + cURL/AL code generation.
 - **Expiry:** when the sheet row's `expiryDate` < now (next session, since startup re-checks), `getStatus` returns `activated:false` and the activation gate re-appears. Owner extends by editing `expiryDate` directly in the sheet.
 - **Offline grace:** if Sheets is unreachable, `LicenseService` falls back to the cached license for up to 24h.
@@ -332,7 +332,7 @@ Bundled outputs:
 - **State direction:** Webview never owns persistent data — it always asks the extension. Stores are caches of server state.
 - **Single source of truth for types:** `src/shared/models.ts`. Webview duplicates in `webview-ui/src/types/index.ts`; when adding fields, update **both** in the same change.
 - **Adding a new endpoint/feature requires the 5-touch pattern** (see §6 last bullet). Skipping any step leaves it half-wired.
-- **No secrets in `aavami-data.json`** — anything sensitive goes through `StorageService.setSecret`. History scrubs auth.
+- **No secrets in `GISP-data.json`** — anything sensitive goes through `StorageService.setSecret`. History scrubs auth.
 - **OAuth2 redirect URIs must be `localhost` / `127.0.0.1`** — enforced in `AuthService.fetchAuthCodeToken`.
 - **Binary uploads** are read on the extension side (`MainPanel` `selectBinaryFile`), capped at **10 MB**, transferred as base64.
 - **CSP:** webview has strict CSP (`script-src 'nonce-...'`). Don't add inline scripts or remote resources without updating `webviewUtils.ts`.
@@ -370,8 +370,8 @@ Bundled outputs:
 2. `extension.ts` → `vscode.commands.registerCommand` + push to subscriptions.
 
 ### Add a new setting
-1. `package.json` → `contributes.configuration.properties.aavamiRest.<key>`.
-2. Consumer reads via `vscode.workspace.getConfiguration('aavamiRest').get('<key>', default)`.
+1. `package.json` → `contributes.configuration.properties.GISPRest.<key>`.
+2. Consumer reads via `vscode.workspace.getConfiguration('GISPRest').get('<key>', default)`.
 3. If exposed to webview: extend `ExtensionSettings`, update `MainPanel.getSettings`/`saveSettings`.
 
 ### Add a new extension↔webview message
@@ -428,7 +428,7 @@ Edit column F (`expiryDate`) directly in the sheet — set it to any future ISO 
 See [SETUP.md](SETUP.md). Summary: paste the Apps Script code into the sheet's Apps Script editor, deploy as Web App ("Anyone" access, "Me" execute), copy the deployment URL + the shared token into `LicenseService.ts` lines 10–11.
 
 ### Offline / failure semantics
-- First successful `checkActivation` writes `{role, expiryDate, lastVerifiedAt}` to `SecretStorage[aavamiRest.licenseCache]`.
+- First successful `checkActivation` writes `{role, expiryDate, lastVerifiedAt}` to `SecretStorage[GISPRest.licenseCache]`.
 - If a later `checkActivation` call fails (network, quota, transient), `LicenseService` re-uses the cached license **only if** `Date.now() - lastVerifiedAt < 24h`. Beyond that → `activated:false`.
 - If the publisher hasn't filled in `SCRIPT_URL`/`SHARED_TOKEN` yet, `LicenseService.isConfigured()` returns false and the extension falls back to the local cache (so activation still works for the publisher's own dev machine without a sheet).
 

@@ -77,7 +77,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         break;
 
       default:
-        vscode.commands.executeCommand('aavamiRest.open');
+        vscode.commands.executeCommand('GISPRest.open');
         break;
     }
   }

@@ -32,7 +32,7 @@ export class HistoryService {
     entries.unshift(entry);
 
     const maxEntries = vscode.workspace
-      .getConfiguration('aavamiRest')
+      .getConfiguration('GISPRest')
       .get<number>('maxHistoryEntries', MAX_HISTORY_ENTRIES);
 
     if (entries.length > maxEntries) {

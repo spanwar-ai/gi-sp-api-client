@@ -39,11 +39,11 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('aavamiRest.open', openPanel),
-    vscode.commands.registerCommand('aavamiRest.newRequest', openPanel),
-    vscode.commands.registerCommand('aavamiRest.saveRequest', openPanel),
+    vscode.commands.registerCommand('GISPRest.open', openPanel),
+    vscode.commands.registerCommand('GISPRest.newRequest', openPanel),
+    vscode.commands.registerCommand('GISPRest.saveRequest', openPanel),
 
-    vscode.commands.registerCommand('aavamiRest.newCollection', async () => {
+    vscode.commands.registerCommand('GISPRest.newCollection', async () => {
       const name = await vscode.window.showInputBox({
         prompt: 'Enter collection name',
         placeHolder: 'My Collection',
@@ -54,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }),
 
-    vscode.commands.registerCommand('aavamiRest.newEnvironment', async () => {
+    vscode.commands.registerCommand('GISPRest.newEnvironment', async () => {
       const name = await vscode.window.showInputBox({
         prompt: 'Enter environment name',
         placeHolder: 'Development',
@@ -65,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }),
 
-    vscode.commands.registerCommand('aavamiRest.importCollection', async () => {
+    vscode.commands.registerCommand('GISPRest.importCollection', async () => {
       const fileUri = await vscode.window.showOpenDialog({
         canSelectFiles: true,
         canSelectMany: false,
@@ -83,7 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }),
 
-    vscode.commands.registerCommand('aavamiRest.exportCollection', async () => {
+    vscode.commands.registerCommand('GISPRest.exportCollection', async () => {
       const collections = await collectionService.getAll();
       if (collections.length === 0) {
         vscode.window.showWarningMessage('No collections to export');
@@ -108,7 +108,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }),
 
-    vscode.commands.registerCommand('aavamiRest.clearHistory', async () => {
+    vscode.commands.registerCommand('GISPRest.clearHistory', async () => {
       const confirm = await vscode.window.showWarningMessage(
         'Clear all request history?',
         { modal: true },
@@ -120,7 +120,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }),
 
-    vscode.commands.registerCommand('aavamiRest.resetActivation', async () => {
+    vscode.commands.registerCommand('GISPRest.resetActivation', async () => {
       const confirm = await vscode.window.showWarningMessage(
         'Reset activation? This clears the cached license, role, and OAuth2 tokens. You will be asked to re-activate.',
         { modal: true },
@@ -129,10 +129,10 @@ export function activate(context: vscode.ExtensionContext) {
       if (confirm !== 'Reset') return;
 
       // Legacy + current keys — clear them all so a fresh activation flow runs.
-      await storageService.deleteSecret('aavamiRest.activated');
-      await storageService.deleteSecret('aavamiRest.role');
-      await storageService.deleteSecret('aavamiRest.licenseCache');
-      await storageService.deleteSecret('aavamiRest.tokenCache');
+      await storageService.deleteSecret('GISPRest.activated');
+      await storageService.deleteSecret('GISPRest.role');
+      await storageService.deleteSecret('GISPRest.licenseCache');
+      await storageService.deleteSecret('GISPRest.tokenCache');
 
       const reload = await vscode.window.showInformationMessage(
         'Activation reset. Reload the window to re-activate.',
@@ -152,7 +152,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider('aavamiRest.sidebarView', sidebarProvider)
+    vscode.window.registerWebviewViewProvider('GISPRest.sidebarView', sidebarProvider)
   );
 
   // Auto-open the main panel when the extension activates

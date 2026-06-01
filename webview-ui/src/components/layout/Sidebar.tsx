@@ -91,7 +91,7 @@ export function Sidebar() {
 
       {isAdmin && (
         <div className="border-t border-vscode-border p-2 flex flex-col gap-1.5">
-          <p className="text-[9px] text-vscode-fg opacity-35 text-center truncate" title="C:\RestApiTestData\aavami-data.json">
+          <p className="text-[9px] text-vscode-fg opacity-35 text-center truncate" title="C:\RestApiTestData\GISP-data.json">
             Data: C:\RestApiTestData
           </p>
           <div className="flex gap-1.5">
