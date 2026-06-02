@@ -1,10 +1,12 @@
-# GI-SP REST & SOAP Client
+# GI-SP API Client
 
 > **A REST + SOAP + OAuth2 API client for Visual Studio Code.** A Postman / Thunder Client / Insomnia alternative — fully inside your editor, with first-class support for Microsoft Dynamics 365 Business Central AL code generation.
 
+![Main panel — request editor and response viewer](resources/screenshots/Main%20Screen%20after%20activation.png)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![VS Code](https://img.shields.io/badge/VS%20Code-%5E1.85.0-blue.svg)](https://code.visualstudio.com/)
-[![Phase](https://img.shields.io/badge/release-Phase%201%20%E2%80%94%20alpha-orange.svg)](#release-phases)
+[![Phase](https://img.shields.io/badge/release-Phase%201.5%20%E2%80%94%20beta-orange.svg)](#release-phases)
 
 ---
 
@@ -14,8 +16,9 @@ This extension ships in phases — narrow scope first, expanded protocols in lat
 
 | Phase | Version | Scope |
 |---|---|---|
-| **Phase 1 (you are here)** | `0.1.x` | **REST + SOAP**, OAuth2 (3 flows), collections, environments, history, cURL + AL code generation |
-| Phase 2 (planned) | `0.2.x` | GraphQL body type + query/variables editors |
+| Phase 1 | `0.1.x` | REST + SOAP, OAuth2 (3 flows), collections, environments, history, cURL + AL code generation |
+| **Phase 1.5 (you are here)** | `0.2.x` | Adds 1-month trial activation, environment-level auth, License Status panel, expiry warning banner, status-bar widget |
+| Phase 2 (planned) | `0.3.x` | GraphQL body type + query/variables editors |
 | Future | `0.x` | WebSocket, gRPC, request scripting (under consideration) |
 
 ---
@@ -34,10 +37,15 @@ This extension ships in phases — narrow scope first, expanded protocols in lat
 
 ## Quick start
 
-1. Click the extension icon in the Activity Bar (or open the Command Palette → `GI-SP REST & SOAP Client: Open`).
-2. On first run you'll see a one-time activation screen — click **Request Activation Code** to email the publisher; you'll receive a 6-digit code to unlock.
+1. Click the extension icon in the Activity Bar (or open the Command Palette → `GI-SP API Client: Open`).
+2. On first run you'll see the activation screen. Pick one:
+   - **Activate Trial Version (1 Month)** — instant, no email, no code required. Grants `user`-role access for 30 days. One trial per machine.
+   - **Request Activation Code** — email the publisher to receive a 6-digit code (`Admin` or `User` role).
+
+   ![Activation screen — trial vs activation code](resources/screenshots/Activation%20Screen.png)
 3. Type a URL → pick a method → hit **Send**. That's it.
 4. Save useful requests into a Collection. Define environments (Dev / Staging / Prod) and reference variables with `{{baseUrl}}`, `{{apiKey}}`, etc.
+5. Watch the bottom-right status bar — `🔑 GI-SP: <role> · <days>d` tells you how long until your license expires. Click it for the License Status panel.
 
 ---
 
@@ -69,7 +77,19 @@ Optional `resource` parameter (RFC 8707) on every OAuth2 flow. Token status with
 - Save any open request to a collection in one click
 - Import / export collections in **native JSON** or **Postman v2** format
 - Multiple named environments — variables defined once, reused everywhere with `{{var}}`
+- **Environment-level auth** — bake Bearer / API Key / OAuth2 credentials into Dev / Staging / Prod once; auto-applied to any request that doesn't override (request-level auth always wins)
+- **Environment selector on the URL bar** (admin only) — switch active environment without opening the sidebar
 - Built-in dynamic variables: `$timestamp`, `$isoTimestamp`, `$randomInt`, `$guid`, `$randomUUID`
+
+![Environment editor — default OAuth2 Client Credentials auth](resources/screenshots/Enviorment%20with%20Auth2.0.png)
+
+### License & activation
+- **Activate Trial Version** — instant 1-month `user`-role trial; one-time per machine
+- **License Status panel** — shows role, plan (Trial / Activated), expiry date, country, city, and activation code used. Open from the status bar or via `GI-SP API Client: View License`
+- **Status bar widget** — `🔑 GI-SP: <role> · <days>d`, turns orange ≤7 days, red ≤3
+- **Expiry warning banner** — appears at the top of the main panel when ≤7 days remain
+- 30-day validity per machine; the publisher can extend any time by editing the central sheet
+- 24-hour offline grace period
 
 ### Response viewer
 - JSON tree view with collapse / expand
@@ -85,6 +105,8 @@ Optional `resource` parameter (RFC 8707) on every OAuth2 flow. Token status with
   - Headers, auth, and body pre-filled
   - Companion `AcquireAccessToken` procedure for OAuth2 (covers all 3 flows)
   - `SecretText` used correctly for sensitive values
+
+![AL Code tab — Generate AL Code button](resources/screenshots/Generate%20AL%20Code.png)
 
 ### History
 - Automatic, up to 500 entries (configurable)
@@ -102,15 +124,16 @@ Optional `resource` parameter (RFC 8707) on every OAuth2 flow. Token status with
 
 | Command | What it does |
 |---|---|
-| `GI-SP REST & SOAP Client: Open` | Open the main panel |
-| `GI-SP REST & SOAP Client: New Request` | New request tab |
-| `GI-SP REST & SOAP Client: Save Request` | Save current request to a collection |
-| `GI-SP REST & SOAP Client: New Collection` | Create a collection |
-| `GI-SP REST & SOAP Client: New Environment` | Create an environment |
-| `GI-SP REST & SOAP Client: Import Collection` | Import JSON / Postman v2 |
-| `GI-SP REST & SOAP Client: Export Collection` | Export a collection to JSON |
-| `GI-SP REST & SOAP Client: Clear History` | Delete all history entries |
-| `GI-SP REST & SOAP Client: Reset Activation` | Clear cached license; useful when switching machines |
+| `GI-SP API Client: Open` | Open the main panel |
+| `GI-SP API Client: New Request` | New request tab |
+| `GI-SP API Client: Save Request` | Save current request to a collection |
+| `GI-SP API Client: New Collection` | Create a collection |
+| `GI-SP API Client: New Environment` | Create an environment |
+| `GI-SP API Client: Import Collection` | Import JSON / Postman v2 |
+| `GI-SP API Client: Export Collection` | Export a collection to JSON |
+| `GI-SP API Client: Clear History` | Delete all history entries |
+| `GI-SP API Client: View License` | Open the License Status panel |
+| `GI-SP API Client: Reset Activation` | Clear cached license; useful when switching machines |
 
 ---
 
@@ -118,11 +141,11 @@ Optional `resource` parameter (RFC 8707) on every OAuth2 flow. Token status with
 
 | Setting | Default | Description |
 |---|---|---|
-| `aavamiRest.requestTimeout` | `30000` | Request timeout in milliseconds |
-| `aavamiRest.maxHistoryEntries` | `500` | Maximum history entries kept |
-| `aavamiRest.followRedirects` | `true` | Follow HTTP 3xx redirects |
-| `aavamiRest.sslVerification` | `true` | Verify SSL certificates |
-| `aavamiRest.maxResponseSize` | `10485760` | Max response body size (bytes; default 10 MB) |
+| `giSpApi.requestTimeout` | `30000` | Request timeout in milliseconds |
+| `giSpApi.maxHistoryEntries` | `500` | Maximum history entries kept |
+| `giSpApi.followRedirects` | `true` | Follow HTTP 3xx redirects |
+| `giSpApi.sslVerification` | `true` | Verify SSL certificates |
+| `giSpApi.maxResponseSize` | `10485760` | Max response body size (bytes; default 10 MB) |
 
 ---
 
@@ -146,37 +169,41 @@ Optional `resource` parameter (RFC 8707) on every OAuth2 flow. Token status with
 
 ## Documentation
 
-| Audience | Doc |
+| | |
 |---|---|
-| **End users** | [User Guide](docs/USER_GUIDE.md) — how to send requests, set up auth, use collections, etc. |
-| **Contributors** | [Developer Guide](docs/DEVELOPER_GUIDE.md) — build, architecture, conventions |
-| **Publisher (one person)** | [Publisher Guide](docs/PUBLISHER_GUIDE.md) — licensing setup, packaging, marketplace publish |
-| **Release notes** | [CHANGELOG](CHANGELOG.md) |
+| 📖 | [User Guide](docs/USER_GUIDE.md) — how to send requests, set up auth, use collections, etc. |
+| 📝 | [Release notes](CHANGELOG.md) — what changed in each version |
 
 ---
 
 ## FAQ
 
-**Q: Why do I need an activation code?**
+**Q: How do I try it without contacting the publisher?**
+A: Click **Activate Trial Version** on first launch. You get 30 days of `user`-role access, instantly, no email exchange. One trial per machine — after it expires, you'll need a real code.
+
+**Q: Why do I need an activation code (after the trial)?**
 A: This extension is owner-distributed. You request a code from the publisher (the email arrives within minutes). The activation is valid for 30 days and can be extended.
 
 **Q: Why two codes (Admin vs User)?**
 A: Admin gets the full sidebar (Collections, History, Environments). User gets Collections only — useful when you want to share saved requests with teammates but keep their own request history separate.
 
+**Q: I activated my environment with OAuth2 but my request shows "No Auth" in the Auth tab — why does it still work?**
+A: Environment-level auth auto-applies when a request's own auth is "No Auth". An **Env** badge appears in the Auth tab while this is happening. Set any auth on the request itself to override.
+
 **Q: Does this work offline?**
 A: Yes — for 24 hours after the last successful license check. After that, the activation gate reappears and you'll need network connectivity to re-verify.
 
 **Q: Does my data leave my machine?**
-A: No. All requests, responses, and collections stay local at `C:\RestApiTestData\gi-sp-rest-soap-client-data.json`. OAuth2 tokens go to the OS keychain (never the file). The only network call this extension makes (other than your own API requests) is a small activation check to a Google Apps Script the publisher controls — it sends only your machine ID, hostname, and OS username.
+A: No. All requests, responses, and collections stay local at `C:\RestApiTestData\gi-sp-api-client-data.json`. OAuth2 tokens go to the OS keychain (never the file). The only network calls this extension makes (other than your own API requests) are: (1) a small activation check to a Google Apps Script the publisher controls — sending only machine ID, hostname, and OS username; and (2) for trial activation only, a one-time `ipapi.co` lookup to record country / city of the activation.
 
 **Q: Where's GraphQL?**
-A: Hidden in Phase 1 (this release). Scheduled for Phase 2 — the backend code is already in place; only the UI dropdown is gated.
+A: Hidden in Phase 1.5 (this release). Scheduled for Phase 2 — the backend code is already in place; only the UI dropdown is gated.
 
 **Q: Will Postman collections import?**
 A: Yes — `Import Collection` accepts Postman v2 JSON. Note: complex Postman features (auth, folder hierarchy, environments) are partially mapped; raw JSON bodies and basic structure work.
 
-**Q: Can I extend a user's 30-day window?**
-A: Yes — the publisher edits one cell in a Google Sheet. See the [Publisher Guide](docs/PUBLISHER_GUIDE.md#maintenance).
+**Q: Can I extend my 30-day window?**
+A: Yes — email the publisher at **`spdynamics365@gmail.com`** with your machine ID (visible in the License Status panel) and ask for an extension. The publisher updates it on their side; your access continues without you having to re-activate.
 
 ---
 
@@ -188,4 +215,4 @@ A: Yes — the publisher edits one cell in a Google Sheet. See the [Publisher Gu
 
 ## Issues, ideas, contributions
 
-Open an issue or PR on the project repository. For activation issues or licensing, contact the publisher at `spanwar.ai@gmail.com`.
+Open an issue or PR on the project repository. For activation issues, license extensions, or any licensing questions, email the publisher at **`spdynamics365@gmail.com`**.

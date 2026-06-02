@@ -1,6 +1,0 @@
-node_modules/
-dist/
-webview-ui/dist/
-webview-ui/node_modules/
-.vscode-test/
-out/
